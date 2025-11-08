@@ -1,6 +1,6 @@
 import Credentials from "next-auth/providers/credentials";
 import { compare } from "bcryptjs";
-import NextAuth from "next-auth";
+import { getServerSession } from "next-auth";
 import { connectDB } from "./db";
 import User from "@/models/User";
 
@@ -14,12 +14,17 @@ export const authOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(creds) {
-        await connectDB();
-        const user = await User.findOne({ email: creds.email });
-        if (!user) return null;
-        const ok = await compare(creds.password, user.passwordHash);
-        if (!ok) return null;
-        return { id: user._id.toString(), name: user.name, email: user.email };
+        try {
+          await connectDB();
+          const user = await User.findOne({ email: creds.email });
+          if (!user) return null;
+          const ok = await compare(creds.password, user.passwordHash);
+          if (!ok) return null;
+          return { id: user._id.toString(), name: user.name, email: user.email };
+        } catch (err) {
+          console.error("[AUTH] authorize error:", err?.message || err);
+          throw new Error("Database connection failed");
+        }
       },
     }),
   ],
@@ -34,4 +39,7 @@ export const authOptions = {
     },
   },
 };
-export const { handlers, auth } = NextAuth(authOptions);
+export async function auth() {
+  // Wrapper so existing imports keep working in server components
+  return getServerSession(authOptions);
+}
