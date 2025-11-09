@@ -2,8 +2,11 @@ import Link from "next/link";
 import Button from "@/components/ui/Button";
 import NavLink from "@/components/ui/NavLink";
 import { LogoMark, MenuIcon } from "@/components/icons";
+import { auth } from "@/lib/auth";
+import SignOutButton from "@/components/ui/SignOutButton";
 
-export default function Header() {
+export default async function Header() {
+  const session = await auth();
   return (
     <header className="sticky top-0 z-40 border-b border-[#111827] bg-[#0E0F11]/85 backdrop-blur">
       <div className="mx-auto w-full max-w-[1920px] px-4 sm:px-6 lg:px-10">
@@ -20,10 +23,22 @@ export default function Header() {
             <NavLink href="/faq">FAQ</NavLink>
           </nav>
           <div className="hidden md:flex items-center gap-3">
-            <Link href="/login" className="text-sm text-[#F9FAFB] hover:text-[#FACC15] focus:outline-none focus:ring-2 focus:ring-[#FACC15]/40 rounded-lg px-2 py-1">
-              Login
-            </Link>
-            <Button as="a" href="/register" size="sm">Start Free</Button>
+            {session ? (
+              <>
+                <span className="hidden lg:inline text-sm text-[#9CA3AF]">
+                  Hi, <span className="text-[#FACC15]">{session.user?.name || "User"}</span>
+                </span>
+                <NavLink href="/dashboard">Dashboard</NavLink>
+                <SignOutButton size="sm" />
+              </>
+            ) : (
+              <>
+                <Link href="/login" className="text-sm text-[#F9FAFB] hover:text-[#FACC15] focus:outline-none focus:ring-2 focus:ring-[#FACC15]/40 rounded-lg px-2 py-1">
+                  Login
+                </Link>
+                <Button as="a" href="/register" size="sm">Start Free</Button>
+              </>
+            )}
           </div>
           <details className="md:hidden relative">
             <summary className="list-none inline-flex items-center justify-center rounded-lg border border-[#1F2937] p-2 text-[#F9FAFB] hover:border-[#FACC15] focus:outline-none focus:ring-2 focus:ring-[#FACC15]/40 cursor-pointer">
@@ -37,8 +52,17 @@ export default function Header() {
                 <Link className="inline-flex items-center px-3 py-2 rounded-xl border border-[#1F2937] hover:border-[#FACC15] transition" href="/pricing">Pricing</Link>
                 <Link className="inline-flex items-center px-3 py-2 rounded-xl border border-[#1F2937] hover:border-[#FACC15] transition" href="/faq">FAQ</Link>
                 <hr className="my-2 border-[#111827]" />
-                <Link className="inline-flex items-center px-3 py-2 rounded-xl border border-[#1F2937] hover:border-[#FACC15] transition" href="/login">Login</Link>
-                <Button as="a" href="/register" className="mt-2">Start Free</Button>
+                {session ? (
+                  <>
+                    <Link className="inline-flex items-center px-3 py-2 rounded-xl border border-[#1F2937] hover:border-[#FACC15] transition" href="/dashboard">Dashboard</Link>
+                    <SignOutButton className="mt-2" fullWidth />
+                  </>
+                ) : (
+                  <>
+                    <Link className="inline-flex items-center px-3 py-2 rounded-xl border border-[#1F2937] hover:border-[#FACC15] transition" href="/login">Login</Link>
+                    <Button as="a" href="/register" className="mt-2">Start Free</Button>
+                  </>
+                )}
               </nav>
             </div>
           </details>
@@ -47,4 +71,3 @@ export default function Header() {
     </header>
   );
 }
-

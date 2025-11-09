@@ -33,6 +33,20 @@ const defaultSlides: Slide[] = [
     caption: "Drag, drop, and swap meals effortlessly.",
   },
   {
+    type: "video",
+    src: "https://cdn.coverr.co/videos/coverr-flipping-vegetables-in-a-pan-6862/1080p.mp4",
+    alt: "Cooking veggies video",
+    headline: "Cook Along Clips",
+    caption: "Quick step videos to guide your cooking.",
+  },
+  {
+    type: "video",
+    src: "https://cdn.coverr.co/videos/coverr-pouring-sauce-on-pasta-4051/1080p.mp4",
+    alt: "Pouring sauce video",
+    headline: "Tasty Inspiration",
+    caption: "See and feel recipes come to life.",
+  },
+  {
     type: "image",
     src: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=1600&auto=format&fit=crop",
     alt: "Chickpea bowl",
