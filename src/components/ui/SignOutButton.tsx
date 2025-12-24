@@ -15,9 +15,12 @@ export default function SignOutButton({ className = "", size = "md", fullWidth =
     void signOut({ callbackUrl: "/" });
   };
   return (
-    <Button onClick={onClick} size={size} className={`${className} ${fullWidth ? "w-full" : ""}`}>
+    <Button
+      onClick={onClick}
+      size={size}
+      className={`${className} ${fullWidth ? "w-full" : ""} bg-gray-300 text-[#0E0F11] hover:bg-gray-200 border border-gray-300`}
+    >
       Logout
     </Button>
   );
 }
-
